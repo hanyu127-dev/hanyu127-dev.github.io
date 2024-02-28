@@ -1,0 +1,1408 @@
+<!DOCTYPE HTML>
+<html lang="zh_CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="从0到1手写RPC, 星皇">
+    <meta name="description" content="前言#什么是RPCRPC（Remote Procedure Call）远程过程调用，简言之就是像调用本地方法一样调用远程服务。目前外界使用较多的有gRPC、Dubbo、Spring Cloud等。相信大家对RPC的概念都已经很熟悉了，这里不">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>从0到1手写RPC | 星皇</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 7.1.1">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="星皇" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">星皇</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="" class="waves-effect waves-light">
+
+      
+      <i class="fas fa-list" style="zoom: 0.6;"></i>
+      
+      <span>Medias</span>
+      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
+    </a>
+    <ul class="sub-nav menus_item_child ">
+      
+      <li>
+        <a href="/music">
+          
+          <i class="fas fa-music" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>Music</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/movies">
+          
+          <i class="fas fa-film" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>Movies</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/books">
+          
+          <i class="fas fa-book" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>Books</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/galleries">
+          
+          <i class="fas fa-image" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>Galleries</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">星皇</div>
+        <div class="logo-desc">
+            
+            欢迎来到「编程精选」，这里是一位热爱编程的程序员的个人技术博客。我是星皇，一名初级程序小白，致力于分享在编程、软件开发和技术创新领域的心得体会和经验。
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="javascript:;">
+			
+				<i class="fa-fw fas fa-list"></i>
+			
+			Medias
+			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
+		</a>
+            <ul  style="background:  ;" >
+              
+                <li>
+
+                  <a href="/music " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-music" style="position: absolute;left:50px" ></i>
+			      
+		          <span>Music</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/movies " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-film" style="position: absolute;left:50px" ></i>
+			      
+		          <span>Movies</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/books " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-book" style="position: absolute;left:50px" ></i>
+			      
+		          <span>Books</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/galleries " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-image" style="position: absolute;left:50px" ></i>
+			      
+		          <span>Galleries</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">从0到1手写RPC</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">No tag</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2024-02-24
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>Update Date:&nbsp;&nbsp;
+                    2024-02-24
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    3.4k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    14 Min
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+        <!-- 代码块折行 -->
+        <style type="text/css">
+            code[class*="language-"], pre[class*="language-"] { white-space: pre-wrap !important; }
+        </style>
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><h3 id="什么是RPC"><a href="#什么是RPC" class="headerlink" title="#什么是RPC"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E4%BB%80%E4%B9%88%E6%98%AFrpc">#</a><strong>什么是RPC</strong></h3><p>RPC（Remote Procedure Call）远程过程调用，简言之就是像调用本地方法一样调用远程服务。目前外界使用较多的有gRPC、Dubbo、Spring Cloud等。相信大家对RPC的概念都已经很熟悉了，这里不做过多介绍。</p>
+<h3 id="为啥要自己写"><a href="#为啥要自己写" class="headerlink" title="#为啥要自己写"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E4%B8%BA%E5%95%A5%E8%A6%81%E8%87%AA%E5%B7%B1%E5%86%99">#</a>为啥要自己写</h3><p>为什么要自己写一个RPC框架，dubbo难道满足不了你？我觉得从个人成长上说，如果一个程序员能清楚的了解RPC框架所具备的要素，掌握RPC框架中涉及的服务注册发现、负载均衡、序列化协议、RPC通信协议、Socket通信、异步调用、熔断降级等技术，可以全方位的提升基本素质。虽然也有相关源码，但是只看源码容易眼高手低，动手写一个才是自己真正掌握这门技术的最优路径。（换个角度想想dubbo真的适合你们项目吗？有多少人觉得dubbo只是比feign性能好，更主流，大公司都用等等理由才用的？）</p>
+<h2 id="RPC框架要素"><a href="#RPC框架要素" class="headerlink" title="#RPC框架要素"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#rpc%E6%A1%86%E6%9E%B6%E8%A6%81%E7%B4%A0">#</a><strong>RPC框架要素</strong></h2><p>一款分布式RPC框架离不开三个基本要素：</p>
+<ul>
+<li>服务提供方 Serivce Provider</li>
+<li>服务消费方 Servce Consumer</li>
+<li>注册中心 Registery</li>
+</ul>
+<p>围绕上面三个基本要素可以进一步扩展服务路由、负载均衡、服务熔断降级、序列化协议、通信协议等等。</p>
+<ol>
+<li><p><strong>注册中心</strong></p>
+<p>主要是用来完成服务注册和发现的工作。虽然服务调用是服务消费方直接发向服务提供方的，但是现在服务都是集群部署，服务的提供者数量也是动态变化的，所以服务的地址也就无法预先确定。因此如何发现这些服务就需要一个统一注册中心来承载。</p>
+</li>
+<li><p><strong>服务提供方（RPC服务端）</strong></p>
+<p>其需要对外提供服务接口，它需要在应用启动时连接注册中心，将服务名及其服务元数据发往注册中心。同时需要提供服务服务下线的机制。需要维护服务名和真正服务地址映射。服务端还需要启动Socket服务监听客户端请求。</p>
+</li>
+<li><p><strong>服务消费方（RPC客户端）</strong></p>
+<p>客户端需要有从注册中心获取服务的基本能力，它需要在应用启动时，扫描依赖的RPC服务，并为其生成代理调用对象，同时从注册中心拉取服务元数据存入本地缓存，然后发起监听各服务的变动做到及时更新缓存。在发起服务调用时，通过代理调用对象，从本地缓存中获取服务地址列表，然后选择一种负载均衡策略筛选出一个目标地址发起调用。调用时会对请求数据进行序列化，并采用一种约定的通信协议进行socket通信。</p>
+</li>
+</ol>
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="#技术选型"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B">#</a><strong>技术选型</strong></h2><h3 id="注册中心"><a href="#注册中心" class="headerlink" title="#注册中心"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83">#</a>注册中心</h3><p>目前成熟的注册中心有Zookeeper，Nacos，Consul，Eureka，它们的主要比较如下：</p>
+<p><img src="https://returnac.cn/images/image_uZAdaXvPwp.png" alt="img"></p>
+<p>我们这里采用nacos</p>
+<h3 id="IO通信框架"><a href="#IO通信框架" class="headerlink" title="#IO通信框架"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#io%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6">#</a>IO通信框架</h3><p>本实现采用Netty作为底层通信框架，Netty是一个高性能事件驱动型的非阻塞的IO(NIO)框架。</p>
+<h3 id="通信协议"><a href="#通信协议" class="headerlink" title="#通信协议"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE">#</a>通信协议</h3><p>TCP通信过程中会根据TCP缓冲区的实际情况进行包的划分，所以在业务上认为一个完整的包可能会被TCP拆分成多个包进行发送，也有可能把多个小的包封装成一个大的数据包发送，这就是所谓的TCP粘包和拆包问题。所以需要对发送的数据包封装到一种通信协议里。</p>
+<p>业界的主流协议的解决方案可以归纳如下：</p>
+<ol>
+<li>消息定长，例如每个报文的大小为固定长度100字节，如果不够用空格补足。</li>
+<li>在包尾特殊结束符进行分割。</li>
+<li>将消息分为消息头和消息体，消息头中包含表示消息总长度（或者消息体长度）的字段。</li>
+</ol>
+<p>很明显1，2都有些局限性，本实现采用方案3，<strong>自定义协议</strong></p>
+<h3 id="序列化协议"><a href="#序列化协议" class="headerlink" title="#序列化协议"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E5%BA%8F%E5%88%97%E5%8C%96%E5%8D%8F%E8%AE%AE">#</a>序列化协议</h3><p>常见的协议有JavaSerializer、json、Protobuf及Hessian。建议选用Protobuf，其序列化后码流小性能高，非常适合RPC调用，Google自家的gRPC也是用其作为通信协议。但是我们这里采用<strong>Hessian2</strong>序列化（懒，其他后续慢慢实现）</p>
+<h2 id="整体架构"><a href="#整体架构" class="headerlink" title="#整体架构"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84">#</a>整体架构</h2><p><img src="https://returnac.cn/images/image_F6p-04GZCW.png" alt="img"></p>
+<p>下面就来看看实现吧</p>
+<h2 id="通信相关"><a href="#通信相关" class="headerlink" title="#通信相关"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E9%80%9A%E4%BF%A1%E7%9B%B8%E5%85%B3">#</a>通信相关</h2><h3 id="通信协议-1"><a href="#通信协议-1" class="headerlink" title="#通信协议"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE-1">#</a><strong>通信协议</strong></h3><p><img src="https://returnac.cn/images/image_O-3Mh6cCHl.png" alt="img"></p>
+<ul>
+<li>第一个是魔法数，比如我定义为0x01F1。</li>
+<li>第二个代表时间戳，以便对时间进行校验</li>
+<li>第三个是消息类型，如0代表请求1代表响应。</li>
+<li>第四个是加密序列号，采用随机的方式对消息体加密和解密</li>
+<li>第五个表示消息长度，即此后面的内容是消息content。</li>
+</ul>
+<p>对应实体类如下：</p>
+<p><img src="https://returnac.cn/images/image_0ptwGVjIDj.png" alt="img"></p>
+<h3 id="编码器"><a href="#编码器" class="headerlink" title="#编码器"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E7%BC%96%E7%A0%81%E5%99%A8">#</a><strong>编码器</strong></h3><p>也就是需要按顺序写入消息的字节到缓冲器，如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EasyRpcEncoder</span> <span class="keyword">extends</span> <span class="title class_">MessageToByteEncoder</span>&lt;RpcRemoteMsg&gt; {</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">encode</span><span class="params">(ChannelHandlerContext channelHandlerContext, RpcRemoteMsg rpcRemoteMsg, ByteBuf out)</span> <span class="keyword">throws</span> Exception {</span><br><span class="line">        <span class="comment">// 写入开头的标志</span></span><br><span class="line">        out.writeShort(rpcRemoteMsg.getStartSign());</span><br><span class="line">        <span class="comment">// 写入秒时间戳</span></span><br><span class="line">        out.writeInt(rpcRemoteMsg.getTimeStamp());</span><br><span class="line">        <span class="comment">// 写消息类型</span></span><br><span class="line">        out.writeShort(rpcRemoteMsg.getMsgType());</span><br><span class="line">        <span class="comment">// 写入加密序列号</span></span><br><span class="line">        out.writeShort(rpcRemoteMsg.getEncryptSequence());</span><br><span class="line">        <span class="comment">// 写入消息长度</span></span><br><span class="line">        out.writeInt(rpcRemoteMsg.getContentLength());</span><br><span class="line">        <span class="comment">// 写入消息主体</span></span><br><span class="line">        out.writeBytes(rpcRemoteMsg.getContent());</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="解码器"><a href="#解码器" class="headerlink" title="#解码器"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E8%A7%A3%E7%A0%81%E5%99%A8">#</a><strong>解码器</strong></h3><p>这里省事，直接继承<strong>LengthFieldBasedFrameDecoder</strong>实现自己逻辑，如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EasyRpcDecoder</span> <span class="keyword">extends</span> <span class="title class_">LengthFieldBasedFrameDecoder</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Logger</span> <span class="variable">log</span> <span class="operator">=</span> LoggerFactory.getLogger(EasyRpcDecoder.class);</span><br><span class="line">    <span class="comment">// 开始标记</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">short</span> <span class="variable">HEAD_START</span> <span class="operator">=</span> (<span class="type">short</span>) <span class="number">0x01F1</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">EasyRpcDecoder</span><span class="params">(<span class="type">int</span> maxFrameLength, <span class="type">int</span> lengthFieldOffset, <span class="type">int</span> lengthFieldLength)</span> {</span><br><span class="line">        <span class="built_in">super</span>(maxFrameLength, lengthFieldOffset, lengthFieldLength);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">EasyRpcDecoder</span><span class="params">(<span class="type">int</span> maxFrameLength, <span class="type">int</span> lengthFieldOffset, <span class="type">int</span> lengthFieldLength, <span class="type">int</span> lengthAdjustment, <span class="type">int</span> initialBytesToStrip)</span> {</span><br><span class="line">        <span class="built_in">super</span>(maxFrameLength, lengthFieldOffset, lengthFieldLength, lengthAdjustment, initialBytesToStrip);</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">EasyRpcDecoder</span><span class="params">(<span class="type">int</span> maxFrameLength, <span class="type">int</span> lengthFieldOffset, <span class="type">int</span> lengthFieldLength, <span class="type">int</span> lengthAdjustment, <span class="type">int</span> initialBytesToStrip, <span class="type">boolean</span> failFast)</span> {</span><br><span class="line">        <span class="built_in">super</span>(maxFrameLength, lengthFieldOffset, lengthFieldLength, lengthAdjustment, initialBytesToStrip, failFast);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">EasyRpcDecoder</span><span class="params">(ByteOrder byteOrder, <span class="type">int</span> maxFrameLength, <span class="type">int</span> lengthFieldOffset, <span class="type">int</span> lengthFieldLength, <span class="type">int</span> lengthAdjustment, <span class="type">int</span> initialBytesToStrip, <span class="type">boolean</span> failFast)</span> {</span><br><span class="line">        <span class="built_in">super</span>(byteOrder, maxFrameLength, lengthFieldOffset, lengthFieldLength, lengthAdjustment, initialBytesToStrip, failFast);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Object <span class="title function_">decode</span><span class="params">(ChannelHandlerContext ctx, ByteBuf in)</span> <span class="keyword">throws</span> Exception {</span><br><span class="line">        <span class="comment">// 经过父解码器的处理 我们就不需要在考虑沾包和半包了</span></span><br><span class="line">        <span class="comment">// 当然，想要自己处理沾包和半包问题也不是不可以</span></span><br><span class="line">        <span class="type">ByteBuf</span> <span class="variable">decode</span> <span class="operator">=</span> (ByteBuf) <span class="built_in">super</span>.decode(ctx, in);</span><br><span class="line">        <span class="keyword">if</span> (decode == <span class="literal">null</span>) {</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">// 开始标志校验  开始标志不匹配直接 过滤此条消息</span></span><br><span class="line">        <span class="type">short</span> <span class="variable">startIndex</span> <span class="operator">=</span> decode.readShort();</span><br><span class="line">        <span class="keyword">if</span> (startIndex != HEAD_START) {</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">// 时间戳</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">timeStamp</span> <span class="operator">=</span> decode.readInt();</span><br><span class="line">        <span class="comment">// 请求还是响应  0：请求  1：响应</span></span><br><span class="line">        <span class="type">short</span> <span class="variable">msgType</span> <span class="operator">=</span> decode.readShort();</span><br><span class="line">        <span class="comment">// 加密序列号</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">encryptSequence</span> <span class="operator">=</span> decode.readShort();</span><br><span class="line">        <span class="comment">// 消息体长度</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">contentLength</span> <span class="operator">=</span> decode.readInt();</span><br><span class="line">        <span class="comment">// 读取消息</span></span><br><span class="line">        <span class="type">byte</span>[] msgByte = <span class="keyword">new</span> <span class="title class_">byte</span>[contentLength];</span><br><span class="line">        decode.readBytes(msgByte);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将消息转成实体类 传递给下面的数据处理器</span></span><br><span class="line">        <span class="keyword">return</span> msgType == <span class="number">0</span> ? EncryptUtil.remoteMsgToRequest(encryptSequence,msgByte) : EncryptUtil.remoteMsgToResponse(encryptSequence,msgByte);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="nacos相关"><a href="#nacos相关" class="headerlink" title="#nacos相关"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#nacos%E7%9B%B8%E5%85%B3">#</a>nacos相关</h2><p>nacos其实很简单一共四个方法：</p>
+<ul>
+<li><strong>registerInstance</strong> ：注册</li>
+<li><strong>deregisterInstance</strong> ： 下线</li>
+<li><strong>getAllInstances</strong> ： 获取所有实例</li>
+<li><strong>subscribe</strong> ：订阅服务</li>
+</ul>
+<p>我们nacos全局就一个使用类：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NacosEasyRpcCenter</span> <span class="keyword">implements</span> <span class="title class_">EasyRpcCenter</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">Logger</span> <span class="variable">log</span> <span class="operator">=</span> LoggerFactory.getLogger(NacosEasyRpcCenter.class);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">DEFAULT_NAMESPACE</span> <span class="operator">=</span> <span class="string">"public"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">DEFAULT_META_PARAM</span> <span class="operator">=</span> <span class="string">"easyRpcMeta"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> NacosNamingService nacosNamingService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> EasyRpcApplicationConfig applicationConfig;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> EasyRpcCenterConfig centerConfig;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">NacosEasyRpcCenter</span><span class="params">(EasyRpcCenterConfig centerConfig, EasyRpcApplicationConfig rpcApplicationConfig)</span> {</span><br><span class="line">        Assert.isTrue(StrUtil.isNotEmpty(centerConfig.getAddress()), <span class="string">"registry address cannot be empty"</span>);</span><br><span class="line">        Assert.isTrue(StrUtil.isNotEmpty(centerConfig.getGroup()), <span class="string">"registry group cannot be empty"</span>);</span><br><span class="line">        <span class="built_in">this</span>.applicationConfig = rpcApplicationConfig;</span><br><span class="line">        <span class="built_in">this</span>.centerConfig = centerConfig;</span><br><span class="line">        <span class="type">Properties</span> <span class="variable">properties</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Properties</span>();</span><br><span class="line">        properties.setProperty(<span class="string">"serverAddr"</span>, String.format(<span class="string">"%s:%d"</span>, centerConfig.getAddress(), centerConfig.getPort()));</span><br><span class="line">        properties.setProperty(<span class="string">"namespace"</span>, StrUtil.emptyToDefault(centerConfig.getNamespace(), DEFAULT_NAMESPACE));</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            <span class="built_in">this</span>.nacosNamingService = <span class="keyword">new</span> <span class="title class_">NacosNamingService</span>(properties);</span><br><span class="line">        } <span class="keyword">catch</span> (NacosException e) {</span><br><span class="line">            log.error(<span class="string">"Easy-Rpc -&gt; nacos center init error:{}"</span>, e.getErrMsg(), e);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">EasyRpcRunException</span>(e.getErrMsg());</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">registerInstance</span><span class="params">(ServiceInstance serviceInstance)</span> {</span><br><span class="line">        <span class="type">Instance</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Instance</span>();</span><br><span class="line">        instance.setIp(serviceInstance.getIp());</span><br><span class="line">        instance.setPort(serviceInstance.getPort());</span><br><span class="line">        Map&lt;String, String&gt; meteData=<span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;(<span class="number">4</span>);</span><br><span class="line">        meteData.put(DEFAULT_META_PARAM,JSONObject.toJSONString(serviceInstance.getMetaDataSet()));</span><br><span class="line">        instance.setMetadata(meteData);</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            nacosNamingService.registerInstance(applicationConfig.getName(), centerConfig.getGroup(),instance);</span><br><span class="line">        } <span class="keyword">catch</span> (NacosException e) {</span><br><span class="line">            log.error(<span class="string">"Easy-Rpc -&gt; nacos center register error:{}"</span>, e.getErrMsg(), e);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">EasyRpcRunException</span>(e.getErrMsg());</span><br><span class="line">        }</span><br><span class="line">        log.info(<span class="string">"Easy-Rpc -&gt; nacos center register:[ serviceName:{} group:{} ] success"</span>,applicationConfig.getName(),centerConfig.getGroup());</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">deregisterInstance</span><span class="params">(ServiceInstance serviceInstance)</span> {</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            nacosNamingService.deregisterInstance(applicationConfig.getName(), centerConfig.getGroup(),serviceInstance.getIp(),serviceInstance.getPort());</span><br><span class="line">        } <span class="keyword">catch</span> (NacosException e) {</span><br><span class="line">            log.error(<span class="string">"Easy-Rpc -&gt; nacos center deregister error:{}"</span>, e.getErrMsg(), e);</span><br><span class="line">        }</span><br><span class="line">        log.info(<span class="string">"Easy-Rpc -&gt; nacos center deregister:[ serviceName:{} group:{} ] success"</span>,applicationConfig.getName(),centerConfig.getGroup());</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;ServiceInstance&gt; <span class="title function_">getAllInstances</span><span class="params">(String serviceId)</span> {</span><br><span class="line">        List&lt;ServiceInstance&gt; serviceInstanceList = EasyRpcInstanceCache.getServiceInstanceList(serviceId);</span><br><span class="line">        <span class="keyword">if</span>(CollectionUtil.isEmpty(serviceInstanceList)){</span><br><span class="line">            serviceInstanceList = <span class="keyword">new</span> <span class="title class_">CopyOnWriteArrayList</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(<span class="number">8</span>));</span><br><span class="line">            <span class="keyword">try</span> {</span><br><span class="line">                List&lt;Instance&gt; allInstances = nacosNamingService.getAllInstances(serviceId, centerConfig.getGroup());</span><br><span class="line">                <span class="keyword">if</span>(CollectionUtil.isNotEmpty(allInstances)){</span><br><span class="line">                    <span class="keyword">for</span>(Instance instance:allInstances){</span><br><span class="line">                        serviceInstanceList.add(<span class="keyword">new</span> <span class="title class_">ServiceInstance</span>(instance.getIp(), instance.getPort()));</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            } <span class="keyword">catch</span> (NacosException e) {</span><br><span class="line">                log.error(<span class="string">"Easy-Rpc -&gt; nacos center deregister error:{}"</span>, e.getErrMsg(), e);</span><br><span class="line">            }</span><br><span class="line">            EasyRpcInstanceCache.updateServiceInstanceInfo(serviceId,serviceInstanceList);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> serviceInstanceList;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">subscribeInstance</span><span class="params">(String serviceId)</span> {</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            nacosNamingService.subscribe(serviceId, centerConfig.getGroup(), <span class="keyword">new</span> <span class="title class_">AbstractEventListener</span>() {</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> Executor <span class="title function_">getExecutor</span><span class="params">()</span> {</span><br><span class="line">                    <span class="keyword">return</span> ThreadPoolUtils.subscribeInstancePool;</span><br><span class="line">                }</span><br><span class="line"></span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onEvent</span><span class="params">(Event event)</span> {</span><br><span class="line">                    <span class="type">NamingEvent</span> <span class="variable">namingEvent</span> <span class="operator">=</span> (NamingEvent) event;</span><br><span class="line">                    List&lt;Instance&gt; allInstances = namingEvent.getInstances();</span><br><span class="line">                    List&lt;ServiceInstance&gt; serviceInstanceList = <span class="keyword">new</span> <span class="title class_">CopyOnWriteArrayList</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(<span class="number">8</span>));</span><br><span class="line">                    <span class="keyword">if</span>(CollectionUtil.isNotEmpty(allInstances)){</span><br><span class="line">                        <span class="keyword">for</span>(Instance instance:allInstances){</span><br><span class="line">                            serviceInstanceList.add(<span class="keyword">new</span> <span class="title class_">ServiceInstance</span>(instance.getIp(), instance.getPort()));</span><br><span class="line">                        }</span><br><span class="line">                    }</span><br><span class="line">                    <span class="comment">// 直接把本地的全量替换</span></span><br><span class="line">                    EasyRpcInstanceCache.updateServiceInstanceInfo(serviceId,serviceInstanceList);</span><br><span class="line">                }</span><br><span class="line">            });</span><br><span class="line">        } <span class="keyword">catch</span> (NacosException e) {</span><br><span class="line">            log.error(<span class="string">"Easy-Rpc -&gt; nacos center subscribe error:{}"</span>, e.getErrMsg(), e);</span><br><span class="line">        }</span><br><span class="line">        log.info(<span class="string">"Easy-Rpc -&gt; nacos center subscribe:[{}] success"</span>,serviceId);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="消费者相关"><a href="#消费者相关" class="headerlink" title="#消费者相关"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E6%B6%88%E8%B4%B9%E8%80%85%E7%9B%B8%E5%85%B3">#</a>消费者相关</h2><p>消费者不用想，凡是这种RPC的几乎都是动态代理，问题是用什么样的方法为它生成代理，我们以Feign为例看看它是怎么做的？</p>
+<p><strong>启动注解→扫描包下被注解标识的接口→获取封装信息→生成FeignClientFactoryBean注入容器</strong></p>
+<p><img src="https://returnac.cn/images/image_CslT48jUM2.png" alt="img"></p>
+<p>感兴趣的可以自己去看看，最终我们采用注解调用时，获取的无非是<strong>factoryBean.getObject();</strong> 返回的动态代理对象罢了</p>
+<p>想想这样合适吗？<strong>他需要扫描整个包然后生成代理对象再放入容器，要是这个对象压根没人用岂不是白生成了？</strong> 所以我这里改了一下，不再扫描包生成了，<strong>我在你属性注入时才生成！</strong></p>
+<h3 id="自定义注解"><a href="#自定义注解" class="headerlink" title="#自定义注解"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3">#</a>自定义注解</h3><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target({ElementType.FIELD})</span></span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> EasyRpcServiceInvoke {</span><br><span class="line">    <span class="comment">// 服务项ID</span></span><br><span class="line">    String <span class="title function_">serviceId</span><span class="params">()</span>;</span><br><span class="line">    <span class="comment">// 服务发布的Bean 名称</span></span><br><span class="line">    String <span class="title function_">beanRefName</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>此注解代表我需要获取远程调用的代理对象，如：</p>
+<p><img src="https://returnac.cn/images/image_yXBIfqLXL9.png" alt="img"></p>
+<h3 id="消费者后置处理器"><a href="#消费者后置处理器" class="headerlink" title="#消费者后置处理器"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E6%B6%88%E8%B4%B9%E8%80%85%E5%90%8E%E7%BD%AE%E5%A4%84%E7%90%86%E5%99%A8">#</a>消费者后置处理器</h3><p>所以我要在Bean属性注入的时候，为它注入一个动态代理对象，同时添加需要订阅的服务项</p>
+<p>这个服务项在Nacos中就是服务名，就好比feign也需要指定一个服务名是吧</p>
+<p><img src="https://returnac.cn/images/image_a_G9shqtad.png" alt="img"></p>
+<p>为什么dubbo不需要？因为dubbo在nacos不是以服务为单位，而是以暴露的接口服务为单位，如下：</p>
+<p><img src="https://returnac.cn/images/image_L3v3aEw_yv.png" alt="img"></p>
+<h3 id="代理对象生成"><a href="#代理对象生成" class="headerlink" title="#代理对象生成"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E4%BB%A3%E7%90%86%E5%AF%B9%E8%B1%A1%E7%94%9F%E6%88%90">#</a>代理对象生成</h3><p>这里采用了Cglib动态代理，为什么不用jdk动态代理，主要是为了避免反射耗时，也方便以后拓展的灵活性</p>
+<p><strong>代理工厂：</strong></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CglibInvokeBeanProxyFactory</span> {</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Author</span> colins</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span>  获取客户端远程调用代理对象</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> T</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; T <span class="title function_">getClientInvokeProxy</span><span class="params">(Class&lt;T&gt; interfaceClass, String serviceId, String beanRef,String interfaces)</span> <span class="keyword">throws</span> Exception {</span><br><span class="line">        <span class="keyword">return</span> (T) Enhancer.create(interfaceClass, <span class="keyword">new</span> <span class="title class_">CglibInvocationHandler</span>(serviceId, beanRef,interfaces));</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>代理处理类：</strong></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CglibInvocationHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> {</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String serviceId;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String beanRef;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String interfaces;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">CglibInvocationHandler</span><span class="params">(String serviceId, String beanRef, String interfaces)</span> {</span><br><span class="line">        <span class="built_in">this</span>.serviceId = serviceId;</span><br><span class="line">        <span class="built_in">this</span>.beanRef = beanRef;</span><br><span class="line">        <span class="built_in">this</span>.interfaces = interfaces;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object o, Method method, Object[] objects)</span> <span class="keyword">throws</span> Throwable {</span><br><span class="line">        List&lt;ServiceInstance&gt; serviceInstanceList = EasyRpcInstanceCache.getServiceInstanceList(serviceId);</span><br><span class="line">        <span class="keyword">if</span> (CollectionUtil.isEmpty(serviceInstanceList)) {</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">EasyRpcException</span>(String.format(<span class="string">"[ %d ] No corresponding service found "</span>, serviceId));</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 构建请求参数</span></span><br><span class="line">        <span class="type">EasyRpcRequest</span> <span class="variable">easyRpcRequest</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">EasyRpcRequest</span>(UUID.randomUUID().toString(),beanRef, interfaces, method.getName(), method.getParameterTypes(), objects);</span><br><span class="line">        <span class="comment">// 获取会话</span></span><br><span class="line">        <span class="type">EasyRpcSession</span> <span class="variable">easyRpcSession</span> <span class="operator">=</span> EasyRpcSessionFactory.getInstance().openSession(serviceId, easyRpcRequest, serviceInstanceList);</span><br><span class="line">        <span class="comment">// 会话执行调用</span></span><br><span class="line">        <span class="keyword">return</span> easyRpcSession.exec();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="生产者相关"><a href="#生产者相关" class="headerlink" title="#生产者相关"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E7%94%9F%E4%BA%A7%E8%80%85%E7%9B%B8%E5%85%B3">#</a>生产者相关</h2><h3 id="自定义注解-1"><a href="#自定义注解-1" class="headerlink" title="#自定义注解"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3-1">#</a>自定义注解</h3><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target({ElementType.TYPE})</span></span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> EasyRpcServicePublish {</span><br><span class="line">    <span class="comment">// 暴露出去的bean名称 默认就是bean默认名称</span></span><br><span class="line">    String <span class="title function_">beanRefName</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">""</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="生产者后置处理器"><a href="#生产者后置处理器" class="headerlink" title="#生产者后置处理器"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E7%94%9F%E4%BA%A7%E8%80%85%E5%90%8E%E7%BD%AE%E5%A4%84%E7%90%86%E5%99%A8">#</a>生产者后置处理器</h3><p>主要两件事：</p>
+<ul>
+<li>收集暴露出去的bean集合</li>
+<li>收集需要暴露出去的元数据</li>
+</ul>
+<p><img src="https://returnac.cn/images/image_s3siw1oxfY.png" alt="img"></p>
+<p><strong>为什么要收集暴露出去的服务bean？</strong></p>
+<p>仔细看一下上面的注解是一个复合注解，我暴露出去提供远程调用服务的对象在容器中不就是一个bean吗？<strong>所以如果有消费者调用暴露的服务，本质不就是调用远程容器中的bean对象吗？</strong> 所以我给它收集缓存起来，要是有别的服务远程调用过来，我直接走缓存反射执行方法就好了</p>
+<h2 id="容器相关"><a href="#容器相关" class="headerlink" title="#容器相关"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E5%AE%B9%E5%99%A8%E7%9B%B8%E5%85%B3">#</a>容器相关</h2><h3 id="容器启动"><a href="#容器启动" class="headerlink" title="#容器启动"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E5%AE%B9%E5%99%A8%E5%90%AF%E5%8A%A8">#</a>容器启动</h3><p>需要做三件事，启动netty server 、发布服务、订阅服务</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EasyRpcStartEvent</span> <span class="keyword">implements</span> <span class="title class_">ApplicationListener</span>&lt;ContextRefreshedEvent&gt; {</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> EasyRpcConfig rpcConfig;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> EasyRpcCenter rpcCenter;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">EasyRpcStartEvent</span><span class="params">(EasyRpcConfig rpcConfig, EasyRpcCenter rpcCenter)</span> {</span><br><span class="line">        <span class="built_in">this</span>.rpcConfig = rpcConfig;</span><br><span class="line">        <span class="built_in">this</span>.rpcCenter = rpcCenter;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onApplicationEvent</span><span class="params">(ContextRefreshedEvent event)</span> {</span><br><span class="line">        <span class="comment">// 启动NettyServer</span></span><br><span class="line">        ThreadPoolUtils.startNettyPool.execute(<span class="keyword">new</span> <span class="title class_">EasyRpcServer</span>(rpcConfig.getProtocol().getPort(), <span class="keyword">new</span> <span class="title class_">EasyRpcServerHandlerInit</span>()));</span><br><span class="line">        <span class="comment">// 发布服务</span></span><br><span class="line">        rpcCenter.registerInstance(<span class="keyword">new</span> <span class="title class_">ServiceInstance</span>(rpcConfig.getProtocol().getPort(), EasyRpcSpringConstant.serviceMetaDataList));</span><br><span class="line">        <span class="comment">// 订阅服务</span></span><br><span class="line">        EasyRpcSpringConstant.serviceIdList.forEach(item-&gt;{</span><br><span class="line">            rpcCenter.subscribeInstance(item);</span><br><span class="line">        });</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="容器关闭"><a href="#容器关闭" class="headerlink" title="#容器关闭"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E5%AE%B9%E5%99%A8%E5%85%B3%E9%97%AD">#</a>容器关闭</h3><p>只需要让该服务注册下线即可，如果想优雅一点，可以把Netty相关也全关闭（这里先不处理）</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EasyRpcCloseEvent</span> <span class="keyword">implements</span> <span class="title class_">ApplicationListener</span>&lt;ContextClosedEvent&gt; {</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> EasyRpcConfig rpcConfig;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> EasyRpcCenter rpcCenter;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">EasyRpcCloseEvent</span><span class="params">(EasyRpcConfig rpcConfig, EasyRpcCenter rpcCenter)</span> {</span><br><span class="line">        <span class="built_in">this</span>.rpcConfig = rpcConfig;</span><br><span class="line">        <span class="built_in">this</span>.rpcCenter = rpcCenter;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onApplicationEvent</span><span class="params">(ContextClosedEvent event)</span> {</span><br><span class="line">        <span class="comment">// 注销服务即可 其他中断无所谓</span></span><br><span class="line">        <span class="comment">// netty server下线 client会断开重连</span></span><br><span class="line">        rpcCenter.deregisterInstance(<span class="keyword">new</span> <span class="title class_">ServiceInstance</span>(rpcConfig.getProtocol().getPort()));</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="调用相关"><a href="#调用相关" class="headerlink" title="#调用相关"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E8%B0%83%E7%94%A8%E7%9B%B8%E5%85%B3">#</a>调用相关</h2><h3 id="消费者"><a href="#消费者" class="headerlink" title="#消费者"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E6%B6%88%E8%B4%B9%E8%80%85">#</a>消费者</h3><p>消费者在调用的时候本质是执行代理对象中的逻辑，也就是往netty管道中写入数据，不在多说，看看发送数据的实体类</p>
+<p><img src="https://returnac.cn/images/image_UtLgkSMMy5.png" alt="img"></p>
+<h3 id="生产者"><a href="#生产者" class="headerlink" title="#生产者"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E7%94%9F%E4%BA%A7%E8%80%85">#</a>生产者</h3><p>生产者就是根据传来的信息，拿到缓存中对象的bean对象反射执行方法，然后返回</p>
+<p><img src="https://returnac.cn/images/image_j9vfUh55Go.png" alt="img"></p>
+<h2 id="测试结果"><a href="#测试结果" class="headerlink" title="#测试结果"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C">#</a>测试结果</h2><p>消费端16线程，所以均为一台机器(生产、消费、jmeter都在一台机器)</p>
+<p><strong>测试结果仅供参考，在好的条件下，某些配置设置合适点，吞吐量应该更高</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>无传参 无返回</th>
+<th>POJO传参 简单返回</th>
+<th>简单传参 POJO返回</th>
+<th>无传参 POJO_list返回</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>100并发 1000次请求 （共计10000）</td>
+<td>1W左右QPS</td>
+<td>9350左右QPS</td>
+<td>8900左右QPS</td>
+<td>7500左右QPS</td>
+</tr>
+<tr>
+<td>300并发 1000次请求 （共计30000）</td>
+<td>9200左右QPS</td>
+<td>8700左右QPS</td>
+<td>8000左右QPS</td>
+<td>6800左右QPS</td>
+</tr>
+<tr>
+<td>500并发 1000次请求 （共计50000）</td>
+<td>8500左右QPS</td>
+<td>7800左右QPS</td>
+<td>7800左右QPS</td>
+<td>6800左右QPS</td>
+</tr>
+</tbody></table>
+<h2 id="后续拓展"><a href="#后续拓展" class="headerlink" title="#后续拓展"></a><a target="_blank" rel="noopener" href="https://returnac.cn/pages/frame/netty/%E4%BB%8E0-1%E6%89%8B%E5%86%99RPC%E6%A1%86%E6%9E%B6.html#%E5%90%8E%E7%BB%AD%E6%8B%93%E5%B1%95">#</a>后续拓展</h2><p>从以上可以看到很多东西都还没实现，只能说基本雏形搭完了，后续什么SPI机制、服务治理相关、多协议拓展、配置丰富化、多注册中心等等都是可以做的事，最后再看一下架构吧</p>
+<p><img src="https://returnac.cn/images/image_F6p-04GZCW.png" alt="img"></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">星皇</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://example.com/2024/02/24/cong-0-dao-1-shou-xie-rpc/">http://example.com/2024/02/24/cong-0-dao-1-shou-xie-rpc/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint policy. If reproduced, please indicate source
+                    <a href="/about" target="_blank">星皇</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">No tag</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/2024/02/26/cheng-xu-de-xing-neng-fen-xi/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="程序的性能分析">
+                        
+                        <span class="card-title">程序的性能分析</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2024-02-26
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            星皇
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Current&nbsp;<i class="far fa-dot-circle"></i>
+            </div>
+            <div class="card">
+                <a href="/2024/02/24/cong-0-dao-1-shou-xie-rpc/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="从0到1手写RPC">
+                        
+                        <span class="card-title">从0到1手写RPC</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-02-24
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            星皇
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="7487637636"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2024</span>
+            
+            <a href="/about" target="_blank">星皇</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;Total Words:&nbsp;<span
+                        class="white-color">6.3k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;Total visits:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;Total visitors:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+                <span id="sitetime"> Loading ...</span>
+                <script>
+                    var calcSiteTime = function () {
+                        var seconds = 1000;
+                        var minutes = seconds * 60;
+                        var hours = minutes * 60;
+                        var days = hours * 24;
+                        var years = days * 365;
+                        var today = new Date();
+                        var startYear = "2024";
+                        var startMonth = "2";
+                        var startDate = "28";
+                        var startHour = "0";
+                        var startMinute = "0";
+                        var startSecond = "0";
+                        var todayYear = today.getFullYear();
+                        var todayMonth = today.getMonth() + 1;
+                        var todayDate = today.getDate();
+                        var todayHour = today.getHours();
+                        var todayMinute = today.getMinutes();
+                        var todaySecond = today.getSeconds();
+                        var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                        var diff = t2 - t1;
+                        var diffYears = Math.floor(diff / years);
+                        var diffDays = Math.floor((diff / days) - diffYears * 365);
+
+                        // 区分是否有年份.
+                        var language = 'zh_CN';
+                        if (startYear === String(todayYear)) {
+                            document.getElementById("year").innerHTML = todayYear;
+                            var daysTip = 'This site has been running for ' + diffDays + ' days';
+                            if (language === 'zh-CN') {
+                                daysTip = '本站已运行 ' + diffDays + ' 天';
+                            } else if (language === 'zh-HK') {
+                                daysTip = '本站已運行 ' + diffDays + ' 天';
+                            }
+                            document.getElementById("sitetime").innerHTML = daysTip;
+                        } else {
+                            document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                            var yearsAndDaysTip = 'This site has been running for ' + diffYears + ' years and '
+                                + diffDays + ' days';
+                            if (language === 'zh-CN') {
+                                yearsAndDaysTip = '本站已运行 ' + diffYears + ' 年 ' + diffDays + ' 天';
+                            } else if (language === 'zh-HK') {
+                                yearsAndDaysTip = '本站已運行 ' + diffYears + ' 年 ' + diffDays + ' 天';
+                            }
+                            document.getElementById("sitetime").innerHTML = yearsAndDaysTip;
+                        }
+                    }
+
+                    calcSiteTime();
+                </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1181062873@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+    
+    
+        
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/sakura.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

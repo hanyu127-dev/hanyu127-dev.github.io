@@ -4,8 +4,11 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, 星皇">
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex">
+    <meta name="keywords" content="数组, 星皇">
+    <meta name="description" content="s
+1. 数组的概念数组是存储在连续内存空间上相同类型数据的集合。
+Java中一维数组内存连续，二维数组中的元素为一维数组，一维数组是连续的，但元素与元素之间的内存地址不一定连续
+在Java中，可以使用System.identityHash">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +20,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hello World | 星皇</title>
+    <title>数组 | 星皇</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -444,12 +447,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello World</h1>
+                    <h1 class="description center-align post-title">数组</h1>
                 </div>
             </div>
         </div>
@@ -485,28 +488,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2024-02-28
+                    2024-02-26
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>Update Date:&nbsp;&nbsp;
-                    2024-02-28
+                    2024-02-26
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    73
+                    1.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    1 Min
+                    5 Min
                 </div>
                 
 
@@ -534,19 +537,68 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
+                <p>s</p>
+<h2 id="1-数组的概念"><a href="#1-数组的概念" class="headerlink" title="1. 数组的概念"></a>1. 数组的概念</h2><p>数组是存储在连续内存空间上相同类型数据的集合。</p>
+<p>Java中一维数组内存连续，二维数组中的元素为一维数组，一维数组是连续的，但元素与元素之间的内存地址不一定连续</p>
+<p>在Java中，可以使用<code>System.identityHashCode()</code>方法来获取对象（包括数组）的内存地址。该方法返回一个32位的哈希值，但并不能直接表示真正的内存地址。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">getMemoryAddress</span><span class="params">(<span class="type">int</span>[] arr)</span>{</span><br><span class="line">	 <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; arr.length; i++) {</span><br><span class="line">            <span class="type">int</span> <span class="variable">element</span> <span class="operator">=</span> arr[i];</span><br><span class="line">            <span class="type">int</span> <span class="variable">memoryAddress</span> <span class="operator">=</span> System.identityHashCode(element);</span><br><span class="line">            System.out.println(<span class="string">"Element "</span>+element+ <span class="string">"  memoryAddress "</span>+memoryAddress);</span><br><span class="line">     }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="1-1二分查找"><a href="#1-1二分查找" class="headerlink" title="1.1二分查找"></a>1.1二分查找</h3><p>二分查找的前提是数组是有序的且无重复元素。</p>
+<p><strong>【题目描述】</strong></p>
+<p>在一个有序且无重复元素的数组nums中，寻找一个元素target,如果找到，返回对应下标，没有返回-1</p>
+<p>力扣 <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-search/description/">https://leetcode.cn/problems/binary-search/description/</a></p>
+<p>主要问题：边界条件</p>
+<h4 id="1-1-1左闭右闭-left-right"><a href="#1-1-1左闭右闭-left-right" class="headerlink" title="1.1.1左闭右闭[left,right]"></a>1.1.1左闭右闭[left,right]</h4><p>定义target在一个[] 区间</p>
+<ul>
+<li>那left与right相等的情况在区间是有意义的，所以while(left&lt;=right)</li>
+<li>如果nums[mid] &gt; target, 则需要更新搜索范围右下标为mid-1</li>
+</ul>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">binarySearch</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> target)</span>{</span><br><span class="line">    <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> nums.length -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(left&lt;=right){</span><br><span class="line">        <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> left+(right-left)/<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span>(nums[mid]==target){</span><br><span class="line">            <span class="keyword">return</span> mid;</span><br><span class="line">        }<span class="keyword">else</span> <span class="keyword">if</span>(nums[mid]&gt; target){</span><br><span class="line">            right = mid -<span class="number">1</span>;</span><br><span class="line">        }</span><br><span class="line">        left = mid + <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+
+
+<h4 id="1-1-2左开右闭-left-right"><a href="#1-1-2左开右闭-left-right" class="headerlink" title="1.1.2左开右闭[left,right]"></a>1.1.2左开右闭[left,right]</h4><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">search</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> target)</span> {</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> nums.length;</span><br><span class="line">        <span class="type">int</span> middle;</span><br><span class="line">        <span class="keyword">while</span>(left &lt; right){</span><br><span class="line">            middle = left+(right-left)/<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(nums[middle]==target){</span><br><span class="line">                <span class="keyword">return</span> middle;</span><br><span class="line">            }<span class="keyword">else</span> <span class="keyword">if</span>(nums[middle]&gt;target){</span><br><span class="line">                right = middle;</span><br><span class="line">            }<span class="keyword">else</span>{</span><br><span class="line">                left = middle+<span class="number">1</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    }</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h3 id="1-2-移除元素"><a href="#1-2-移除元素" class="headerlink" title="1.2 移除元素"></a>1.2 移除元素</h3><p><strong>【题目描述】</strong></p>
+<p>原地移除数组中所有等于val的元素，要求不能使用额外的辅助空间，及空间复杂度为O(1),返回移除元素后的新数组的size</p>
+<p>力扣 <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-element/description/">https://leetcode.cn/problems/remove-element/description/</a></p>
+<h4 id="1-2-1暴力解法"><a href="#1-2-1暴力解法" class="headerlink" title="1.2.1暴力解法"></a>1.2.1暴力解法</h4><p>双重循环，第一重循环寻找 val, 第二重循环覆盖</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">remove</span><span class="params">(<span class="type">int</span> arr[], <span class="type">int</span> val)</span>{</span><br><span class="line">    <span class="type">int</span> <span class="variable">size</span> <span class="operator">=</span> arr.length;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size; i++){</span><br><span class="line">         <span class="keyword">if</span>(arr[i] == val){</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> i + <span class="number">1</span>; j &lt; size ; j++){</span><br><span class="line">                arr[j-<span class="number">1</span>] = arr[j];</span><br><span class="line">            }</span><br><span class="line">            i-- ;</span><br><span class="line">            size --;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">	<span class="keyword">return</span> size;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="1-2-2双指针法（快慢指针法）"><a href="#1-2-2双指针法（快慢指针法）" class="headerlink" title="1.2.2双指针法（快慢指针法）"></a>1.2.2双指针法（快慢指针法）</h4><p><strong>双指针法（快慢指针法）</strong>：通过一个快指针和慢指针在一个for循环内完成两个for循环的工作</p>
+<p>快慢指针同时自增，条件满足时，都会将fastIndex下标的赋值给 slowIndex下标的数，条件不满足时，slowindex就不会增加，此时双指针错位</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">remove</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> val)</span>{</span><br><span class="line">	<span class="comment">// 定义两个指针</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">slowIndex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">fastIndex</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(;fastIndex &lt; nums.length ; fastIndex++){</span><br><span class="line">        <span class="keyword">if</span>(nums[fastIndex] != val){</span><br><span class="line">            nums[slowIndex++] = nums[fastIndex];</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> slowIndex;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+
+
+<h3 id="1-3-长度最小的子数组"><a href="#1-3-长度最小的子数组" class="headerlink" title="1.3 长度最小的子数组"></a>1.3 长度最小的子数组</h3><p><strong>【题目描述】</strong></p>
+<p>给定一个含有 <code>n</code> 个正整数的数组和一个正整数 <code>target</code> <strong>。</strong></p>
+<p>找出该数组中满足其总和大于等于 <code>target</code> 的长度最小的 <strong>连续子数组</strong> <code>[numsl, numsl+1, ..., numsr-1, numsr]</code> ，并返回其长度<strong>。</strong>如果不存在符合条件的子数组，返回 <code>0</code> 。</p>
+<h4 id="1-3-1暴力解法"><a href="#1-3-1暴力解法" class="headerlink" title="1.3.1暴力解法"></a>1.3.1暴力解法</h4><p>双重循环，第一重循环获取i,代表从i开始的第二重循环</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minSubArrayLen</span><span class="params">(<span class="type">int</span> target, <span class="type">int</span> nums[])</span>{</span><br><span class="line">	<span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> Integer.MAX_VALUE;</span><br><span class="line">        <span class="type">int</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0</span> ;</span><br><span class="line">        <span class="type">int</span> <span class="variable">length</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; nums.length ; i++){</span><br><span class="line">            sum = <span class="number">0</span> ;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> i ; j &lt; nums.length ; j++){</span><br><span class="line">                sum += nums[j];</span><br><span class="line">                <span class="keyword">if</span>(sum &gt;= target) {</span><br><span class="line">                    length = j-i+<span class="number">1</span>;</span><br><span class="line">                    result = result &lt; length ?result:length;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> result==Integer.MAX_VALUE? <span class="number">0</span>:result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h4 id="1-3-2滑动窗口"><a href="#1-3-2滑动窗口" class="headerlink" title="1.3.2滑动窗口"></a>1.3.2滑动窗口</h4><p>滑动窗口： 就是不断地调节子数组的起始位置和终止位置。</p>
+<p>两个指针：指针之间中的部分是窗口</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minSubArrayLen</span><span class="params">(<span class="type">int</span> target, <span class="type">int</span> nums[])</span>{</span><br><span class="line">	<span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> Integer.MAX_VALUE;</span><br><span class="line">    <span class="type">int</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 起始指针</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">start</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 终止指针</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">end</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(;end&lt; nums.length;end++){</span><br><span class="line">        sum += nums[end];</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 滑动窗口的精髓</span></span><br><span class="line">        <span class="keyword">while</span>(sum &gt;= target){</span><br><span class="line">            <span class="type">int</span> <span class="variable">subLength</span> <span class="operator">=</span> end -start +<span class="number">1</span>;</span><br><span class="line">            result = result &lt; subLength ? result: subLength;</span><br><span class="line">            sum = sum - nums[start] ;</span><br><span class="line">            start ++ ; </span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> result==Integer.MAX_VALUE? <span class="number">0</span>:result;</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+
+
+<h3 id="1-4-螺旋矩阵II"><a href="#1-4-螺旋矩阵II" class="headerlink" title="1.4 螺旋矩阵II"></a>1.4 螺旋矩阵II</h3><p><strong>【题目描述】</strong></p>
+<p>给出一个正整数n,按从外向内的螺旋顺序打印1到n^2的所有数值</p>
+<p><strong>螺旋不变量</strong></p>
+<p>即按照左闭右开或左开右闭的原则，有一定规则的“画”下来</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span>[][] generateMatrix(<span class="type">int</span> n) {</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">	<span class="type">int</span>[][] res = <span class="keyword">new</span> <span class="title class_">int</span>[n][n];</span><br><span class="line">    <span class="comment">// 每循环一圈的起始位置</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">y</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 循环的圈数</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">loop</span> <span class="operator">=</span> n /<span class="number">2</span> ;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="type">int</span> i,j;</span><br><span class="line">    <span class="comment">// 循环一圈后的偏移量</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">offset</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 中心位置</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> n/<span class="number">2</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>(loop--&gt;<span class="number">0</span>){</span><br><span class="line">        i = x;</span><br><span class="line">        j = y;</span><br><span class="line">        <span class="comment">// 从左向右填充</span></span><br><span class="line">        <span class="keyword">for</span>(j=y;j&lt;y+n-offset;j++){</span><br><span class="line">            res[x][j] = count++;</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">// 从上到下填充</span></span><br><span class="line">         <span class="keyword">for</span>(i=x;i&lt;x+n-offset;i++){</span><br><span class="line">            res[i][j] = count++;</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">// 从右到左填充</span></span><br><span class="line">         <span class="keyword">for</span>(;j&gt;y;j--){</span><br><span class="line">            res[i][j] = count++;</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">// 从下到上填充</span></span><br><span class="line">         <span class="keyword">for</span>(;i&gt;x;i--){</span><br><span class="line">            res[i][j] = count++;</span><br><span class="line">        }</span><br><span class="line">       </span><br><span class="line">        <span class="comment">// 起始位置发生改变</span></span><br><span class="line">        x++;</span><br><span class="line">        y++;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 偏移量发生改变</span></span><br><span class="line">        offset += <span class="number">2</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span>(n%<span class="number">2</span>!=<span class="number">0</span>){</span><br><span class="line">        res[mid][mid] = n*n ;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
 
                 
             </div>
@@ -573,7 +625,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2024/02/28/hello-world/">http://example.com/2024/02/28/hello-world/</a>
+                    <a href="http://example.com/2024/02/26/shu-zu/">http://example.com/2024/02/26/shu-zu/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -687,18 +739,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;Current
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/2024/02/28/hello-world/">
+                <a href="/2024/02/26/lian-biao/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="链表">
                         
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">链表</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -708,9 +759,9 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2024-02-28
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2024-02-26
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -719,7 +770,6 @@
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
@@ -730,13 +780,13 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2024/02/26/lian-biao/">
+                <a href="/2024/02/26/cheng-xu-de-xing-neng-fen-xi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="链表">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="程序的性能分析">
                         
-                        <span class="card-title">链表</span>
+                        <span class="card-title">程序的性能分析</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
