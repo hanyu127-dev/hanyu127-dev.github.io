@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>星皇</title>
   
-  
+  <subtitle>欢迎来到「编程精选」，这里是一位热爱编程的程序员的个人技术博客。我是星皇，一名初级程序小白，致力于分享在编程、软件开发和技术创新领域的心得体会和经验。</subtitle>
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
