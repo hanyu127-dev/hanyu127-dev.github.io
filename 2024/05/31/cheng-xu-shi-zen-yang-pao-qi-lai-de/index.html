@@ -447,14 +447,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.6k
+                    2.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    7 分
                 </div>
                 
 
@@ -605,7 +605,73 @@
 <h3 id="2-2-二进制是什么"><a href="#2-2-二进制是什么" class="headerlink" title="2.2 二进制是什么"></a>2.2 二进制是什么</h3><p>二进制代表的是以2为基数来计数的。</p>
 <h3 id="2-3-移位运算与乘除运算的关系"><a href="#2-3-移位运算与乘除运算的关系" class="headerlink" title="2.3 移位运算与乘除运算的关系"></a>2.3 移位运算与乘除运算的关系</h3><p>左移代表在原数的基础上进行乘运算，右移代表的是除运算。</p>
 <h3 id="2-4便于计算机处理的”2的补码“"><a href="#2-4便于计算机处理的”2的补码“" class="headerlink" title="2.4便于计算机处理的”2的补码“"></a>2.4便于计算机处理的”2的补码“</h3><p>为什么要有补码，就是因为计算机只有加法器。</p>
-<p>补码的补码+1就是原码。</p>
+<p>补码的反码+1就是原码。</p>
+<p>正数的原码，反码，补码都一样</p>
+<h3 id="2-5-逻辑右移与算术右移的区别"><a href="#2-5-逻辑右移与算术右移的区别" class="headerlink" title="2.5 逻辑右移与算术右移的区别"></a>2.5 逻辑右移与算术右移的区别</h3><p>逻辑右移：高位填充0，倍数不是原来的几分之几了</p>
+<p>算术右移：高位用符号位进行填充。</p>
+<p>符号扩展：就是将一个8位的二进制数转为16位或32位二进制数。 只需要使用符号位的值进行高位填充</p>
+<h2 id="3-计算机在计算小数时会出错的原因"><a href="#3-计算机在计算小数时会出错的原因" class="headerlink" title="3.计算机在计算小数时会出错的原因"></a>3.计算机在计算小数时会出错的原因</h2><h3 id="3-1-将0-1累加100次的结果不是10"><a href="#3-1-将0-1累加100次的结果不是10" class="headerlink" title="3.1 将0.1累加100次的结果不是10"></a>3.1 将0.1累加100次的结果不是10</h3><p>使用C语言会得到结果为10.000002</p>
+<h3 id="3-2-如何用二进制表示小数"><a href="#3-2-如何用二进制表示小数" class="headerlink" title="3.2 如何用二进制表示小数"></a>3.2 如何用二进制表示小数</h3><p>使用小数部分×位权</p>
+<h3 id="3-3-计算机出错原因"><a href="#3-3-计算机出错原因" class="headerlink" title="3.3 计算机出错原因"></a>3.3 计算机出错原因</h3><p>某些十进制小数无法准确的转换成二进制数</p>
+<h3 id="3-4-什么是浮点数？"><a href="#3-4-什么是浮点数？" class="headerlink" title="3.4 什么是浮点数？"></a>3.4 什么是浮点数？</h3><p>浮点数将小数分为符号、尾数、基数和指数四个部分来表示。</p>
+<p><img src="D:\Lenovo\source_posts\程序是怎样跑起来的\浮点数.png"></p>
+<p>很多编程语言中都提供了两种表示小数的数据类型，分别是<strong>双精度浮点数</strong>和<strong>单精度浮点数</strong>。双精度浮点数类型用 64 位、单精度浮点数类型用 32 位来表示全体小数。在 C 语言中，双精度浮点数类型和单精度浮点数类型分别用 double 和 float 来表示。</p>
+<p><img src="D:\Lenovo\source_posts\程序是怎样跑起来的\浮点数内部构造.png" alt="浮点数内部构造"></p>
+<p>尾数部分和指数部分并不只是单单存储着用整数表示的二进制数。尾数部分用的是“将小数点前面的值固定为 1 的规格化表示法，而指数部分用的则是“移码（excess）表示法”。指数位越多，尾数位则越少，其表示的范围越大，但精度就会变差，反之，指数位越少，尾数位则越多，表示的范围越小，但精度就会变好。</p>
+<h3 id="3-5-规格化表示法-和-移码表示法"><a href="#3-5-规格化表示法-和-移码表示法" class="headerlink" title="3.5 规格化表示法 和 移码表示法"></a>3.5 规格化表示法 和 移码表示法</h3><p>尾数使用规格化表示法</p>
+<figure class="highlight tex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1011.0011        ...原数</span><br><span class="line">1.0110011        ...右移使得正数部分的第1位为1</span><br><span class="line">1.01100110000000000000000  ... 将小数部分扩展至23位</span><br><span class="line">01100110000000000000000    ... 只保留小数部分，完成规格化表示</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p>、</p>
+<p>指数使用移码表示法</p>
+<table>
+<thead>
+<tr>
+<th>实际值（二进制）</th>
+<th>实际值（十进制）</th>
+<th>移码表示法中的对应值（十进制）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>11111111</td>
+<td>255</td>
+<td>128（255-127）</td>
+</tr>
+<tr>
+<td>11111110</td>
+<td>254</td>
+<td>127（254-127）</td>
+</tr>
+<tr>
+<td>….</td>
+<td>….</td>
+<td>…</td>
+</tr>
+<tr>
+<td>01111111</td>
+<td>127</td>
+<td>0</td>
+</tr>
+<tr>
+<td>01111110</td>
+<td>126</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>00000001</td>
+<td>1</td>
+<td>-126</td>
+</tr>
+<tr>
+<td>00000000</td>
+<td>0</td>
+<td>-127</td>
+</tr>
+</tbody></table>
 
                 
             </div>
@@ -1226,7 +1292,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">7.9k</span>
+                        class="white-color">8.5k</span>
             
             
             
