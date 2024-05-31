@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-02-28T11:04:42.611Z</updated>
+  <updated>2024-05-31T09:39:33.683Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,108 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>程序是怎样跑起来的</title>
+    <link href="http://example.com/2024/05/31/cheng-xu-shi-zen-yang-pao-qi-lai-de/"/>
+    <id>http://example.com/2024/05/31/cheng-xu-shi-zen-yang-pao-qi-lai-de/</id>
+    <published>2024-05-31T06:39:46.000Z</published>
+    <updated>2024-05-31T09:39:33.683Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;主要要求：机器语言程序被加载到内存，然后由CPU进行解释和执行，从而完成对计算机系统的控制和数据运算等任务。&lt;/p&gt;
+&lt;h2 id=&quot;1-CPU是什么？&quot;&gt;&lt;a href=&quot;#1-CPU是什么？&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="计算机基础" scheme="http://example.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>动态规划</title>
+    <link href="http://example.com/2024/02/29/dong-tai-gui-hua/"/>
+    <id>http://example.com/2024/02/29/dong-tai-gui-hua/</id>
+    <published>2024-02-29T13:15:43.000Z</published>
+    <updated>2024-02-29T13:15:43.912Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>贪心算法</title>
+    <link href="http://example.com/2024/02/29/tan-xin-suan-fa/"/>
+    <id>http://example.com/2024/02/29/tan-xin-suan-fa/</id>
+    <published>2024-02-29T13:15:23.000Z</published>
+    <updated>2024-02-29T13:15:23.085Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>回溯算法</title>
+    <link href="http://example.com/2024/02/29/hui-su-suan-fa/"/>
+    <id>http://example.com/2024/02/29/hui-su-suan-fa/</id>
+    <published>2024-02-29T13:15:09.000Z</published>
+    <updated>2024-02-29T13:15:09.626Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>二叉树</title>
+    <link href="http://example.com/2024/02/29/er-cha-shu/"/>
+    <id>http://example.com/2024/02/29/er-cha-shu/</id>
+    <published>2024-02-29T13:14:50.000Z</published>
+    <updated>2024-02-29T13:14:50.696Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>栈与队列</title>
+    <link href="http://example.com/2024/02/29/zhan-yu-dui-lie/"/>
+    <id>http://example.com/2024/02/29/zhan-yu-dui-lie/</id>
+    <published>2024-02-29T13:14:37.000Z</published>
+    <updated>2024-02-29T13:14:37.523Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>字符串</title>
+    <link href="http://example.com/2024/02/29/zi-fu-chuan/"/>
+    <id>http://example.com/2024/02/29/zi-fu-chuan/</id>
+    <published>2024-02-29T13:14:15.000Z</published>
+    <updated>2024-02-29T13:14:15.705Z</updated>
+    
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
